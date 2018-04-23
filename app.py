@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect
 import model
+import json
 
 app = Flask(__name__)
 
@@ -7,6 +8,15 @@ app = Flask(__name__)
 def index():
     ## print the guestbook
     return render_template("index.html", entries=model.get_entries())
+
+@app.route("/admin")
+def admin():
+    return render_template("admin.html",entries=model.get_entries())
+
+@app.route("/delete", methods=["POST"])
+def delete_entry():
+    model.delete_entry(request.form['id'])
+    return redirect('/admin')
 
 @app.route("/add")
 def addentry():
